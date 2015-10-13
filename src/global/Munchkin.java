@@ -68,7 +68,7 @@ public class Munchkin
 		Collections.shuffle(gameOfMunchkin.getDungeonHeap().getDeck());
 		CreateHeapTreasure();
 		Collections.shuffle(gameOfMunchkin.getTreasureHeap().getDeck());
-		gameOfMunchkin.start();
+		gameOfMunchkin.startGame();
 	}
 	
 	/**

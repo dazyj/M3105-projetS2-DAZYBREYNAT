@@ -19,31 +19,21 @@ import global.card.treasure_card.enumeration.*;
 
 public class Game
 	{
-		/**
-		 * The heap Dungeon. 
-		 * It is a heap of cards that contains exclusively cards of type "Dungeon".
-		 */		
-		private Heap Dungeon;
+		
+		private Heap cardsDungeon;
 
-		/**
-		 * The heap Treasure. 
-		 * It is a heap of cards that contains exclusively cards of type "Treasure".
-		 */	
-		private Heap Treasure;
+		private Heap cardsTreasure;
 
-		/**
-		 * Create an object of type Game, with his heaps.
-		 */
 		public Game()
 			{
-				this.Dungeon = new Heap(CardType.dungeon);
-				this.Treasure = new Heap(CardType.treasure);
+				this.cardsDungeon = new Heap(CardType.dungeon);
+				this.cardsTreasure = new Heap(CardType.treasure);
 			}
 
 		/**
 		 * Start the game, and verify before each move of the game, if a player has won the game.
 		 */
-		public void start()
+		public void startGame()
 		{
 			if (Move.getNbMove() == 0)
 			{
@@ -90,7 +80,7 @@ public class Game
 		 */
 		public Heap getDungeonHeap()
 			{
-				return this.Dungeon;
+				return this.cardsDungeon;
 			}
 
 		/**
@@ -99,7 +89,7 @@ public class Game
 		 */
 		public Heap getTreasureHeap()
 			{
-				return this.Treasure;
+				return this.cardsTreasure;
 			}
 
 		/**
@@ -532,12 +522,12 @@ public class Game
             
             public void setDungeon(Heap dungeon)
             {
-            	this.Dungeon = dungeon;
+            	this.cardsDungeon = dungeon;
             }
             
             public void setTreasure(Heap treasure)
             {
-            	this.Treasure = treasure;
+            	this.cardsTreasure = treasure;
             }
             /**
              * 
