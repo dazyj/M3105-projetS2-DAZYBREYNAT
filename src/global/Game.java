@@ -37,31 +37,31 @@ public class Game
 		{
 			if (Move.getNbMove() == 0)
 			{
-				this.initialize();
+				this.initializeGame();
 			}
-			boolean win = false;
-			int idSave = 0;
+			boolean gameIsWon = false;
+			int idPlayerWhoWin = 0;
 			for (int i = 0; i < Munchkin.getNbPlayer(); i++)
 			{
 				if (Munchkin.getTabOfPlayers()[i].getLevel() == 10)
 				{
-					win = true;
-					idSave = i;
+					gameIsWon = true;
+					idPlayerWhoWin = i;
 				}
 			}
-			while (!win)
+			while (!gameIsWon)
 			{
 				Move.start();
 			}
 			
-			System.out.println("Félicitations " + Munchkin.getTabOfPlayers()[idSave].getPseudo() + "Vous avez remporté la partie !");
+			System.out.println("Félicitations " + Munchkin.getTabOfPlayers()[idPlayerWhoWin].getPseudo() + "Vous avez remporté la partie !");
 		}
 
 		/**
 		 * Initialize the game.
 		 * It distribute the cards to the players at the begin of the game.
 		 */
-		public void initialize()
+		public void initializeGame()
 			{
 				for (int j = 0; j < Munchkin.getNbPlayer(); j++)
 					{
