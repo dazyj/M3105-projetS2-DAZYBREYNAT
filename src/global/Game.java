@@ -25,10 +25,10 @@ public class Game
 		private Heap cardsTreasure;
 
 		public Game()
-			{
-				this.cardsDungeon = new Heap(CardType.dungeon);
-				this.cardsTreasure = new Heap(CardType.treasure);
-			}
+		{
+			this.cardsDungeon = new Heap(CardType.dungeon);
+			this.cardsTreasure = new Heap(CardType.treasure);
+		}
 
 		public void startGame()
 		{
@@ -55,101 +55,99 @@ public class Game
 		}
 
 		public void initializeGame()
-			{
-				for (int idPlayers = 0; idPlayers < Munchkin.getNbPlayer(); idPlayers++)
-					{
-						giveStartCardsToOnePlayer(idPlayers);
-					}
-			}
+		{
+			for (int idPlayers = 0; idPlayers < Munchkin.getNbPlayer(); idPlayers++)
+				{
+					giveStartCardsToOnePlayer(idPlayers);
+				}
+		}
 
 		private void giveStartCardsToOnePlayer(int idPlayers)
+		{
+			for (int nbCardByHeapToPull = 0; nbCardByHeapToPull < 4; nbCardByHeapToPull++)
 			{
-				for (int nbCardByHeapToPull = 0; nbCardByHeapToPull < 4; nbCardByHeapToPull++)
-				{
-					Munchkin.getTabOfPlayers()[idPlayers].sendCard(getDungeonHeap());
-					Munchkin.getTabOfPlayers()[idPlayers].sendCard(getTreasureHeap());
-					this.verifVoidHeap();
-				}
+				Munchkin.getTabOfPlayers()[idPlayers].sendCard(getDungeonHeap());
+				Munchkin.getTabOfPlayers()[idPlayers].sendCard(getTreasureHeap());
+				this.verifVoidHeap();
 			}
+		}
 
 		public Heap getDungeonHeap()
-			{
-				return this.cardsDungeon;
-			}
+		{
+			return this.cardsDungeon;
+		}
 
 		public Heap getTreasureHeap()
-			{
-				return this.cardsTreasure;
-			}
+		{
+			return this.cardsTreasure;
+		}
 
 		public Player identifyPlayerById(int id)
+		{
+			for (int idPlayer = 0; idPlayer < Munchkin.getNbPlayer(); idPlayer++)
 			{
-				for (int idPlayer = 0; idPlayer < Munchkin.getNbPlayer(); idPlayer++)
-					{
-						Player player = Munchkin.getTabOfPlayers()[idPlayer];
-						if (player.getId() == id)
-							return player;
-					}
-				return null;
+				Player player = Munchkin.getTabOfPlayers()[idPlayer];
+				if (player.getId() == id)
+					return player;
 			}
+			return null;
+		}
 		
 		public Player identifyPlayerByName(String name)
+		{
+			for (int idPlayer = 0; idPlayer < Munchkin.getNbPlayer(); idPlayer++)
 			{
-				for (int idPlayer = 0; idPlayer < Munchkin.getNbPlayer(); idPlayer++)
-					{
-						Player player = Munchkin.getTabOfPlayers()[idPlayer];
-						int compareNameWithPlayerSPseudo = name.compareTo(player.getPseudo());
-						if (compareNameWithPlayerSPseudo == 0)
-							return player;
-					}
-				return null;
+				Player player = Munchkin.getTabOfPlayers()[idPlayer];
+				int compareNameWithPlayerSPseudo = name.compareTo(player.getPseudo());
+				if (compareNameWithPlayerSPseudo == 0)
+					return player;
 			}
+			return null;
+		}
 
 		/**
-		 * Add buffs to Monster at the begin of a fight.
 		 * We consult all the player to know if they want put a card to improve the monster.
 		 * @param monster
 		 */
 		public void addBuffToMonster(Monster monster)
 		{
 			for (int indexOfPlayer = 0; indexOfPlayer < Munchkin.getNbPlayer(); indexOfPlayer++)
+			{
+				Scanner scanner1 = new Scanner(System.in);
+				String answer = "OUI";
+				int compareAnswerWithOUI = "OUI".compareTo(answer);
+				while (compareAnswerWithOUI == 0)
 				{
-					String iString = String.valueOf(indexOfPlayer);
-					Scanner sc1 = new Scanner(System.in);
-					String answer = "OUI";
-					int compare = "OUI".compareTo(answer);
-					while (compare == 0)
+					System.out.println("Bonjour ,"+Munchkin.getTabOfPlayers()[indexOfPlayer].getPseudo()+ " Voulez-vous ajouter un bonus au monstre ?");
+					System.out.println(Munchkin.getTabOfPlayers()[indexOfPlayer].getHand().toString());
+					answer = scanner1.nextLine();
+					answer.toUpperCase();
+					switch (answer)
 					{
-						System.out.println("Bonjour ,"+Munchkin.getTabOfPlayers()[indexOfPlayer].getPseudo()+ " Voulez-vous ajouter un bonus au monstre ?");
-						System.out.println(Munchkin.getTabOfPlayers()[indexOfPlayer].getHand().toString());
-						answer = sc1.nextLine();
-						answer.toUpperCase();
-						switch (answer)
-						{
-							case "OUI":
-								System.out.println("Choisissez une carte à poser. Rentrer le nom de la carte.");
-								String name = sc1.nextLine();
-								name.toUpperCase();
-								Card card = Munchkin.getTabOfPlayers()[indexOfPlayer].chooseCardToPut(name);
-								if (card instanceof ConsumableItem)
-								{
-									ConsumableItem itemCard = (ConsumableItem) card;
-									FightTab.readMonster().setLevel(FightTab.readMonster().getLevel() + itemCard.getBonus());
-								}
-								if (card instanceof MonsterCurse)
-								{
-									MonsterCurse monsterCurseCard = (MonsterCurse) card;
-									FightTab.readMonster().setLevel(
-									FightTab.readMonster().getLevel() + monsterCurseCard.getMonsterLevelEffect());
-									FightTab.readMonster().setTreasureGain(FightTab.readMonster().getTreasureGain() + monsterCurseCard.getTreasureCardEffect());
-								}
-								System.out.println(FightTab.readMonster().toString());
-								compare = "OUI".compareTo(answer);
-							case "NON":
-								compare = "OUI".compareTo(answer);
-						}
+						case "OUI":
+							System.out.println("Choisissez une carte à poser. Rentrer le nom de la carte.");
+							String name = scanner1.nextLine();
+							name.toUpperCase();
+							Card cardToPut = Munchkin.getTabOfPlayers()[indexOfPlayer].chooseCardToPut(name);
+							if (cardToPut instanceof ConsumableItem)
+							{
+								ConsumableItem itemCard = (ConsumableItem) cardToPut;
+								FightTab.readMonster().setLevel(FightTab.readMonster().getLevel() + itemCard.getBonus());
+							}
+							if (cardToPut instanceof MonsterCurse)
+							{
+								MonsterCurse monsterCurseCard = (MonsterCurse) cardToPut;
+								FightTab.readMonster().setLevel(
+								FightTab.readMonster().getLevel() + monsterCurseCard.getMonsterLevelEffect());
+								FightTab.readMonster().setTreasureGain(FightTab.readMonster().getTreasureGain() + monsterCurseCard.getTreasureCardEffect());
+							}
+							System.out.println(FightTab.readMonster().toString());
+							compareAnswerWithOUI = "OUI".compareTo(answer);
+						case "NON":
+							compareAnswerWithOUI = "OUI".compareTo(answer);
 					}
 				}
+			}
 		}
 		
 		/**
@@ -432,9 +430,7 @@ public class Game
                             Munchkin.getGameOfMunchkin().getDungeonHeap().getDeck().add(new Monster(myPossibleMonster[indexTableau]));
                     }
             }
-            /**
-             * 
-             */
+
             public void createAllCardCurse()
                     {
                             CardCurseSpecification[] myPossibleCardCurse =CardCurseSpecification.values();
@@ -443,9 +439,7 @@ public class Game
                                     Munchkin.getGameOfMunchkin().getDungeonHeap().getDeck().add(new CardCurse(myPossibleCardCurse[indexTableau]));
                             }
                     }
-            /**
-             * 
-             */
+
             public void createAllCardJob()
                     {
                             JobSpecification[] myPossibleJob =JobSpecification.values();
