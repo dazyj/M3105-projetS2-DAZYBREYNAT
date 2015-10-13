@@ -105,10 +105,6 @@ public class Game
 			return null;
 		}
 
-		/**
-		 * We consult all the player to know if they want put a card to improve the monster.
-		 * @param monster
-		 */
 		public void addBuffToMonster(Monster monster)
 		{
 			for (int indexOfPlayer = 0; indexOfPlayer < Munchkin.getNbPlayer(); indexOfPlayer++)
