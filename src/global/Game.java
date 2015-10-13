@@ -30,9 +30,6 @@ public class Game
 				this.cardsTreasure = new Heap(CardType.treasure);
 			}
 
-		/**
-		 * Start the game, and verify before each move of the game, if a player has won the game.
-		 */
 		public void startGame()
 		{
 			if (Move.getNbMove() == 0)
@@ -57,21 +54,22 @@ public class Game
 			System.out.println("Félicitations " + Munchkin.getTabOfPlayers()[idPlayerWhoWin].getPseudo() + "Vous avez remporté la partie !");
 		}
 
-		/**
-		 * Initialize the game.
-		 * It distribute the cards to the players at the begin of the game.
-		 */
 		public void initializeGame()
 			{
-				for (int j = 0; j < Munchkin.getNbPlayer(); j++)
+				for (int idPlayers = 0; idPlayers < Munchkin.getNbPlayer(); idPlayers++)
 					{
-						for (int k = 0; k < 4; k++)
-						{
-							Munchkin.getTabOfPlayers()[j].sendCard(getDungeonHeap());
-							Munchkin.getTabOfPlayers()[j].sendCard(getTreasureHeap());
-							this.verifVoidHeap();
-						}
+						giveStartCardsToOnePlayer(idPlayers);
 					}
+			}
+
+		private void giveStartCardsToOnePlayer(int j)
+			{
+				for (int nbCardByHeapToPull = 0; nbCardByHeapToPull < 4; nbCardByHeapToPull++)
+				{
+					Munchkin.getTabOfPlayers()[j].sendCard(getDungeonHeap());
+					Munchkin.getTabOfPlayers()[j].sendCard(getTreasureHeap());
+					this.verifVoidHeap();
+				}
 			}
 
 		/**

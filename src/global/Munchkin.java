@@ -8,10 +8,6 @@ import global.card.DungeonCard;
 import global.card.treasure_card.Equipment;
 import global.card.treasure_card.enumeration.EquipmentSpecification;
 
-//TODO JAAVADOC
-//TODO TOSTRING
-//TODO TESTS
-//TODO CREER CARTES
 
 /**
  * The application of the Munchkin.
