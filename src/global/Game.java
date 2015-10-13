@@ -62,45 +62,31 @@ public class Game
 					}
 			}
 
-		private void giveStartCardsToOnePlayer(int j)
+		private void giveStartCardsToOnePlayer(int idPlayers)
 			{
 				for (int nbCardByHeapToPull = 0; nbCardByHeapToPull < 4; nbCardByHeapToPull++)
 				{
-					Munchkin.getTabOfPlayers()[j].sendCard(getDungeonHeap());
-					Munchkin.getTabOfPlayers()[j].sendCard(getTreasureHeap());
+					Munchkin.getTabOfPlayers()[idPlayers].sendCard(getDungeonHeap());
+					Munchkin.getTabOfPlayers()[idPlayers].sendCard(getTreasureHeap());
 					this.verifVoidHeap();
 				}
 			}
 
-		/**
-		 * Give the Dungeon Heap.
-		 * @return
-		 */
 		public Heap getDungeonHeap()
 			{
 				return this.cardsDungeon;
 			}
 
-		/**
-		 * Give the Treasure Heap.
-		 * @return
-		 */
 		public Heap getTreasureHeap()
 			{
 				return this.cardsTreasure;
 			}
 
-		/**
-		 * It identify a player with his id.
-		 * The method use the if of the player to find it in the tabOfPlayers of the game and to return it.
-		 * @param id
-		 * @return
-		 */
 		public Player identifyPlayerById(int id)
 			{
-				for (int i = 0; i < Munchkin.getNbPlayer(); i++)
+				for (int idPlayer = 0; idPlayer < Munchkin.getNbPlayer(); idPlayer++)
 					{
-						Player player = Munchkin.getTabOfPlayers()[i];
+						Player player = Munchkin.getTabOfPlayers()[idPlayer];
 						if (player.getId() == id)
 							return player;
 					}
@@ -109,11 +95,11 @@ public class Game
 		
 		public Player identifyPlayerByName(String name)
 			{
-				for (int i = 0; i < Munchkin.getNbPlayer(); i++)
+				for (int idPlayer = 0; idPlayer < Munchkin.getNbPlayer(); idPlayer++)
 					{
-						Player player = Munchkin.getTabOfPlayers()[i];
-						int compare = name.compareTo(player.getPseudo());
-						if (compare == 0)
+						Player player = Munchkin.getTabOfPlayers()[idPlayer];
+						int compareNameWithPlayerSPseudo = name.compareTo(player.getPseudo());
+						if (compareNameWithPlayerSPseudo == 0)
 							return player;
 					}
 				return null;
