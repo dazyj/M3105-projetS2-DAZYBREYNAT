@@ -118,37 +118,45 @@ public class Game
 				int compareAnswerWithOUI = "OUI".compareTo(answer);
 				while (compareAnswerWithOUI == 0)
 				{
-					System.out.println("Bonjour ,"+Munchkin.getTabOfPlayers()[indexOfPlayer].getPseudo()+ " Voulez-vous ajouter un bonus au monstre ?");
-					System.out.println(Munchkin.getTabOfPlayers()[indexOfPlayer].getHand().toString());
-					answer = scanner1.nextLine();
-					answer.toUpperCase();
-					switch (answer)
-					{
-						case "OUI":
-							System.out.println("Choisissez une carte à poser. Rentrer le nom de la carte.");
-							String name = scanner1.nextLine();
-							name.toUpperCase();
-							Card cardToPut = Munchkin.getTabOfPlayers()[indexOfPlayer].chooseCardToPut(name);
-							if (cardToPut instanceof ConsumableItem)
-							{
-								ConsumableItem itemCard = (ConsumableItem) cardToPut;
-								FightTab.readMonster().setLevel(FightTab.readMonster().getLevel() + itemCard.getBonus());
-							}
-							if (cardToPut instanceof MonsterCurse)
-							{
-								MonsterCurse monsterCurseCard = (MonsterCurse) cardToPut;
-								FightTab.readMonster().setLevel(
-								FightTab.readMonster().getLevel() + monsterCurseCard.getMonsterLevelEffect());
-								FightTab.readMonster().setTreasureGain(FightTab.readMonster().getTreasureGain() + monsterCurseCard.getTreasureCardEffect());
-							}
-							System.out.println(FightTab.readMonster().toString());
-							compareAnswerWithOUI = "OUI".compareTo(answer);
-						case "NON":
-							compareAnswerWithOUI = "OUI".compareTo(answer);
-					}
+					questionToPlayerAddBuffMonster(indexOfPlayer, scanner1);
 				}
 			}
 		}
+
+		private void questionToPlayerAddBuffMonster(int indexOfPlayer,
+				Scanner scanner1)
+			{
+				String answer;
+				int compareAnswerWithOUI;
+				System.out.println("Bonjour ,"+Munchkin.getTabOfPlayers()[indexOfPlayer].getPseudo()+ " Voulez-vous ajouter un bonus au monstre ?");
+				System.out.println(Munchkin.getTabOfPlayers()[indexOfPlayer].getHand().toString());
+				answer = scanner1.nextLine();
+				answer.toUpperCase();
+				switch (answer)
+				{
+					case "OUI":
+						System.out.println("Choisissez une carte à poser. Rentrer le nom de la carte.");
+						String name = scanner1.nextLine();
+						name.toUpperCase();
+						Card cardToPut = Munchkin.getTabOfPlayers()[indexOfPlayer].chooseCardToPut(name);
+						if (cardToPut instanceof ConsumableItem)
+						{
+							ConsumableItem itemCard = (ConsumableItem) cardToPut;
+							FightTab.readMonster().setLevel(FightTab.readMonster().getLevel() + itemCard.getBonus());
+						}
+						if (cardToPut instanceof MonsterCurse)
+						{
+							MonsterCurse monsterCurseCard = (MonsterCurse) cardToPut;
+							FightTab.readMonster().setLevel(
+							FightTab.readMonster().getLevel() + monsterCurseCard.getMonsterLevelEffect());
+							FightTab.readMonster().setTreasureGain(FightTab.readMonster().getTreasureGain() + monsterCurseCard.getTreasureCardEffect());
+						}
+						System.out.println(FightTab.readMonster().toString());
+						compareAnswerWithOUI = "OUI".compareTo(answer);
+					case "NON":
+						compareAnswerWithOUI = "OUI".compareTo(answer);
+				}
+			}
 		
 		/**
 		 * Add buffs to a player.
