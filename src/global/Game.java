@@ -165,13 +165,6 @@ public class Game
 				}
 			}
 		
-		/**
-		 * We consult the player 2 times to ask him if he want add a buff different?
-		 * The consumable item : it adds a value to the strength of the player that is considered just for the fight.
-		 * The class Bonus : If the player's class is different from "human", he can remove a number of cards to add a bonus to his strength.
-		 * If the player is a dwarf, we add him a bonus of strength.
-		 * @param player
-		 */
 		public void addBufferToPlayer(Player player)
 		{
 			String response = "OUI";
@@ -189,52 +182,9 @@ public class Game
 				switch (answer)
 				{
 					case "OUI":
-						System.out.println("Voulez-vous ajouter un bonus de carte ? (consommable)?");
-						String bonusToAdd = scanner1.nextLine();
-						bonusToAdd.toUpperCase();
-						int testCompWithOUI = "OUI".compareTo(bonusToAdd);
-						if (testCompWithOUI == 0)
-						{
-							System.out.println("Choisissez une carte à poser. Rentrer le nom de la carte.");
-							String nameCardToPut = scanner1.nextLine();
-							nameCardToPut.toUpperCase();
-							Card card = player.chooseCardToPut(nameCardToPut);
-							if (card instanceof ConsumableItem)
-							{
-								ConsumableItem itemCard = (ConsumableItem) card;
-								player.setStrength(player.getStrength() + itemCard.getBonus());
-								
-							}
-						}
-						if (player.getJob().getName() != null)
-						{
-							System.out.println("Voulez-vous ajouter un bonus de classe (Guerrier, Voleur, Prêtre)?");
-							bonusToAdd = scanner1.nextLine();
-							bonusToAdd.toUpperCase();
-							testCompWithOUI = "OUI".compareTo(bonusToAdd);
-							if (testCompWithOUI == 0)
-							{
-								String stringMaxCardBurnable = String.valueOf(player.getJob().getNbMaxCardBurnable());
-								String stringBonus = String.valueOf(player.getJob().getBonus());
-								System.out.println("Vous pouvez défausser " + stringMaxCardBurnable + " cartes utilisant chacune un bonus de " + stringBonus);
-								if (player.getJob().getNbMaxCardBurnable() != 0)
-								{
-									System.out.println("Combien de cartes voulez-vous défausser ?");
-									int nbCardToBurn = scanner1.nextInt();
-									if (nbCardToBurn < player.getJob().getNbMaxCardBurnable())
-									{
-										int bonusHit = player.getJob().getBonus() * nbCardToBurn;
-										player.setStrength(player.getStrength() + bonusHit);
-									}
-								}
-							}
-						}
-						String nameRace = player.getRace().getName();
-						int testCompWithDWARF = nameRace.compareTo("DWARF");
-						if (testCompWithDWARF > 0)
-						{
-							FightTab.readMonster().setLevel(FightTab.readMonster().getLevel() - 1);
-						}							
+						questionToPlayerAddBuffToPlayerTypeConsumable(player, scanner1);
+						questionToPlayerAddBuffToPlayerTypeClass(player, scanner1);
+						addBuffToPlayerDwarf(player);							
 						System.out.println(player.toString());
 						compareWithOUI = "OUI".compareTo(response);
 					case "NON":
@@ -244,6 +194,68 @@ public class Game
 				}
 			}
 		}
+
+		private void addBuffToPlayerDwarf(Player player)
+			{
+				String nameRace = player.getRace().getName();
+				int testCompWithDWARF = nameRace.compareTo("DWARF");
+				if (testCompWithDWARF > 0)
+				{
+					FightTab.readMonster().setLevel(FightTab.readMonster().getLevel() - 1);
+				}
+			}
+
+		private void questionToPlayerAddBuffToPlayerTypeClass(Player player,
+				Scanner scanner1)
+			{
+				String bonusToAdd;
+				int testCompWithOUI;
+				if (player.getJob().getName() != null)
+				{
+					System.out.println("Voulez-vous ajouter un bonus de classe (Guerrier, Voleur, Prêtre)?");
+					bonusToAdd = scanner1.nextLine();
+					bonusToAdd.toUpperCase();
+					testCompWithOUI = "OUI".compareTo(bonusToAdd);
+					if (testCompWithOUI == 0)
+					{
+						String stringMaxCardBurnable = String.valueOf(player.getJob().getNbMaxCardBurnable());
+						String stringBonus = String.valueOf(player.getJob().getBonus());
+						System.out.println("Vous pouvez défausser " + stringMaxCardBurnable + " cartes utilisant chacune un bonus de " + stringBonus);
+						if (player.getJob().getNbMaxCardBurnable() != 0)
+						{
+							System.out.println("Combien de cartes voulez-vous défausser ?");
+							int nbCardToBurn = scanner1.nextInt();
+							if (nbCardToBurn < player.getJob().getNbMaxCardBurnable())
+							{
+								int bonusHit = player.getJob().getBonus() * nbCardToBurn;
+								player.setStrength(player.getStrength() + bonusHit);
+							}
+						}
+					}
+				}
+			}
+
+		private void questionToPlayerAddBuffToPlayerTypeConsumable(
+				Player player, Scanner scanner1)
+			{
+				System.out.println("Voulez-vous ajouter un bonus de carte ? (consommable)?");
+				String bonusToAdd = scanner1.nextLine();
+				bonusToAdd.toUpperCase();
+				int testCompWithOUI = "OUI".compareTo(bonusToAdd);
+				if (testCompWithOUI == 0)
+				{
+					System.out.println("Choisissez une carte à poser. Rentrer le nom de la carte.");
+					String nameCardToPut = scanner1.nextLine();
+					nameCardToPut.toUpperCase();
+					Card card = player.chooseCardToPut(nameCardToPut);
+					if (card instanceof ConsumableItem)
+					{
+						ConsumableItem itemCard = (ConsumableItem) card;
+						player.setStrength(player.getStrength() + itemCard.getBonus());
+						
+					}
+				}
+			}
 		
 		/**
 		 * Ask to the player gave from the player of the fight if he wants help him.
