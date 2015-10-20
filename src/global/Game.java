@@ -263,30 +263,99 @@ public class Game
 				}
 			}
 		
-		/**
-		 * Ask to the player gave from the player of the fight if he wants help him.
-		 * If he accept, we apply the buff adder to them and see the issue of the fight.
-		 * If he refuse we apply the buff adder to the player of the fight alone and see the issue of the fight. 
-		 * @param help
-		 * @param monster
-		 */
-		public void askHelpToFight(String help, Monster monster)
+		public void askHelpToOtherPlayerToFight(String help, Monster monster)
 		{
-			Player playerOfTheFight = FightTab.readPlayer();
+			Player playerInFight = FightTab.readPlayer();
 			switch (help)
 			{
 			case "OUI":
+				askHelp(playerInFight);
+				actInFight(monster, playerInFight);
+				PhaseDungeonCard1.setToFight(true);
+				
+			case "NON":
+				FightTab.editHelper(null);
+				fightAlone(monster, playerInFight);
+				PhaseDungeonCard1.setToFight(true);
+			}
+		}
+
+		private void fightAlone(Monster monster, Player playerInFight)
+			{
+				this.addBufferToPlayer(playerInFight);
+				if (playerInFight.getStrength() > monster.getLevel())
+					{
+						FightTab.editIsWin(true);
+					}
+					else
+					{
+						FightTab.editIsWin(false);
+					}
+				String jobPlayer = playerInFight.getClass().getName();
+				int testCompPlayerWithWarrior = jobPlayer.compareTo("Warrior");
+				if (testCompPlayerWithWarrior == 0)
+				{
+					if (playerInFight.getStrength() == monster.getLevel())
+					{
+						FightTab.editIsWin(true);
+					}
+				}
+				Munchkin.getTabOfPlayers()[Move.getIdPlayersMove()].setLevel(FightTab.getLevelBeforeP());
+			}
+
+		private void actInFight(Monster monster, Player playerInFight)
+			{
+				if (FightTab.readHelper() != null)
+				{
+					fightTogether(monster, playerInFight);
+				}
+				else
+				{
+					fightAlone(monster, playerInFight);	
+				}
+			}
+
+		private void fightTogether(Monster monster, Player playerInFight)
+			{
+				Player helperInFight = FightTab.readHelper();
+				this.addBufferToPlayer(playerInFight);
+				this.addBufferToPlayer(helperInFight);
+				if (playerInFight.getStrength() + helperInFight.getStrength() > monster.getLevel())
+					{
+						FightTab.editIsWin(true);
+					}
+				else
+					{
+						FightTab.editIsWin(false);
+					}
+				String jobPlayer = playerInFight.getClass().getName();
+				String jobHelper = helperInFight.getClass().getName();
+				int testCompPlayerWithWarrior = jobPlayer.compareTo("Warrior");
+				int testCompHelperWithWarrior = jobHelper.compareTo("Warrior");
+				if (testCompPlayerWithWarrior == 0 || testCompHelperWithWarrior == 0)
+					{
+						if (playerInFight.getStrength() == monster.getLevel())
+							{
+								FightTab.editIsWin(true);
+							}
+					}
+				FightTab.readPlayer().setLevel(FightTab.getLevelBeforeP());
+				FightTab.readHelper().setLevel(FightTab.getLevelBeforeH());
+			}
+
+		private void askHelp(Player playerInFight)
+			{
 				System.out.println("Indiquez le pseudo du joueur concerné.");
-				Scanner sc1 = new Scanner(System.in);
+				Scanner scanner1 = new Scanner(System.in);
 				String nickname;
-				nickname = sc1.nextLine();
+				nickname = scanner1.nextLine();
 				for (int i = 0; i < Munchkin.getNbPlayer(); i++)
 				{
 					int compare2 = nickname.compareTo(Munchkin.getTabOfPlayers()[i].getPseudo());
 					if (compare2 == 0)
 						{
-							System.out.println(nickname + ", êtes vous OK pour aider " + playerOfTheFight.getPseudo() + "?");
-							String ok = sc1.nextLine();
+							System.out.println(nickname + ", êtes vous OK pour aider " + playerInFight.getPseudo() + "?");
+							String ok = scanner1.nextLine();
 							switch (ok)
 							{
 								case "OUI":
@@ -297,81 +366,7 @@ public class Game
 						}
 						
 				}
-				if (FightTab.readHelper() != null)
-				{
-					Player helperOfTheFight = FightTab.readHelper();
-					this.addBufferToPlayer(playerOfTheFight);
-					this.addBufferToPlayer(helperOfTheFight);
-					if (playerOfTheFight.getStrength() + helperOfTheFight.getStrength() > monster.getLevel())
-						{
-							FightTab.editIsWin(true);
-						}
-					else
-						{
-							FightTab.editIsWin(false);
-						}
-					String jobPlayer = playerOfTheFight.getClass().getName();
-					String jobHelper = helperOfTheFight.getClass().getName();
-					int test3 = jobPlayer.compareTo("Warrior");
-					int test4 = jobHelper.compareTo("Warrior");
-					if (test3 == 0 || test4 == 0)
-						{
-							if (playerOfTheFight.getStrength() == monster.getLevel())
-								{
-									FightTab.editIsWin(true);
-								}
-						}
-					FightTab.readPlayer().setLevel(FightTab.getLevelBeforeP());
-					FightTab.readHelper().setLevel(FightTab.getLevelBeforeH());
-				}
-				else
-				{
-					this.addBufferToPlayer(playerOfTheFight);
-					if (playerOfTheFight.getStrength() > monster.getLevel())
-						{
-							FightTab.editIsWin(true);
-						}
-						else
-						{
-							FightTab.editIsWin(false);
-						}
-					String jobPlayer = playerOfTheFight.getClass().getName();
-					int test4 = jobPlayer.compareTo("Warrior");
-					if (test4 == 0)
-					{
-						if (playerOfTheFight.getStrength() == monster.getLevel())
-						{
-							FightTab.editIsWin(true);
-						}
-					}
-					Munchkin.getTabOfPlayers()[Move.getIdPlayersMove()].setLevel(FightTab.getLevelBeforeP());	
-				}
-				PhaseDungeonCard1.setToFight(true);
-				
-			case "NON":
-				FightTab.editHelper(null);
-				this.addBufferToPlayer(playerOfTheFight);
-				if (playerOfTheFight.getStrength() > monster.getLevel())
-					{
-						FightTab.editIsWin(true);
-					}
-					else
-					{
-						FightTab.editIsWin(false);
-					}
-				String jobPlayer = playerOfTheFight.getClass().getName();
-				int test4 = jobPlayer.compareTo("Warrior");
-				if (test4 == 0)
-				{
-					if (playerOfTheFight.getStrength() == monster.getLevel())
-					{
-						FightTab.editIsWin(true);
-					}
-				}
-				Munchkin.getTabOfPlayers()[Move.getIdPlayersMove()].setLevel(FightTab.getLevelBeforeP());
-				PhaseDungeonCard1.setToFight(true);
 			}
-		}
 		
 		/**
 		 * Launch a fight against a monster.
@@ -392,7 +387,7 @@ public class Game
 			String help;
 			help = sc1.nextLine();
 			help.toUpperCase();
-			this.askHelpToFight(help, monster);
+			this.askHelpToOtherPlayerToFight(help, monster);
 		}
 		
 		/**
