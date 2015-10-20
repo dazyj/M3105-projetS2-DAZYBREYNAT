@@ -166,7 +166,6 @@ public class Game
 			}
 		
 		/**
-		 * Add buffs to a player.
 		 * We consult the player 2 times to ask him if he want add a buff different?
 		 * The consumable item : it adds a value to the strength of the player that is considered just for the fight.
 		 * The class Bonus : If the player's class is different from "human", he can remove a number of cards to add a bonus to his strength.
@@ -176,30 +175,30 @@ public class Game
 		public void addBufferToPlayer(Player player)
 		{
 			String response = "OUI";
-			int compare = "OUI".compareTo(response);
+			int compareWithOUI = "OUI".compareTo(response);
 			FightTab.setLevelBeforeP(FightTab.readPlayer().getLevel());
 			if (FightTab.readHelper() != null)
 				FightTab.setLevelBeforeH(FightTab.readHelper().getLevel());
-			while (compare == 0)
+			while (compareWithOUI == 0)
 			{
 				String answer;
 				System.out.println(player.getPseudo()+ ", Voulez-vous rajouter des bonus à vos dégâts ?");
-				Scanner sc1 = new Scanner(System.in);
-				answer = sc1.nextLine();
+				Scanner scanner1 = new Scanner(System.in);
+				answer = scanner1.nextLine();
 				answer.toUpperCase();
 				switch (answer)
 				{
 					case "OUI":
 						System.out.println("Voulez-vous ajouter un bonus de carte ? (consommable)?");
-						String bonus = sc1.nextLine();
-						bonus.toUpperCase();
-						int test = "OUI".compareTo(bonus);
-						if (test == 0)
+						String bonusToAdd = scanner1.nextLine();
+						bonusToAdd.toUpperCase();
+						int testCompWithOUI = "OUI".compareTo(bonusToAdd);
+						if (testCompWithOUI == 0)
 						{
 							System.out.println("Choisissez une carte à poser. Rentrer le nom de la carte.");
-							String name = sc1.nextLine();
-							name.toUpperCase();
-							Card card = player.chooseCardToPut(name);
+							String nameCardToPut = scanner1.nextLine();
+							nameCardToPut.toUpperCase();
+							Card card = player.chooseCardToPut(nameCardToPut);
 							if (card instanceof ConsumableItem)
 							{
 								ConsumableItem itemCard = (ConsumableItem) card;
@@ -210,18 +209,18 @@ public class Game
 						if (player.getJob().getName() != null)
 						{
 							System.out.println("Voulez-vous ajouter un bonus de classe (Guerrier, Voleur, Prêtre)?");
-							bonus = sc1.nextLine();
-							bonus.toUpperCase();
-							test = "OUI".compareTo(bonus);
-							if (test == 0)
+							bonusToAdd = scanner1.nextLine();
+							bonusToAdd.toUpperCase();
+							testCompWithOUI = "OUI".compareTo(bonusToAdd);
+							if (testCompWithOUI == 0)
 							{
-								String maxString = String.valueOf(player.getJob().getNbMaxCardBurnable());
-								String bonusString = String.valueOf(player.getJob().getBonus());
-								System.out.println("Vous pouvez défausser " + maxString + " cartes utilisant chacune un bonus de " + bonusString);
+								String stringMaxCardBurnable = String.valueOf(player.getJob().getNbMaxCardBurnable());
+								String stringBonus = String.valueOf(player.getJob().getBonus());
+								System.out.println("Vous pouvez défausser " + stringMaxCardBurnable + " cartes utilisant chacune un bonus de " + stringBonus);
 								if (player.getJob().getNbMaxCardBurnable() != 0)
 								{
 									System.out.println("Combien de cartes voulez-vous défausser ?");
-									int nbCardToBurn = sc1.nextInt();
+									int nbCardToBurn = scanner1.nextInt();
 									if (nbCardToBurn < player.getJob().getNbMaxCardBurnable())
 									{
 										int bonusHit = player.getJob().getBonus() * nbCardToBurn;
@@ -231,16 +230,16 @@ public class Game
 							}
 						}
 						String nameRace = player.getRace().getName();
-						int test2 = nameRace.compareTo("DWARF");
-						if (test2 > 0)
+						int testCompWithDWARF = nameRace.compareTo("DWARF");
+						if (testCompWithDWARF > 0)
 						{
 							FightTab.readMonster().setLevel(FightTab.readMonster().getLevel() - 1);
 						}							
 						System.out.println(player.toString());
-						compare = "OUI".compareTo(response);
+						compareWithOUI = "OUI".compareTo(response);
 					case "NON":
 						response = "NON";
-						compare = "OUI".compareTo(response);
+						compareWithOUI = "OUI".compareTo(response);
 			
 				}
 			}
