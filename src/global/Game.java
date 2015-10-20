@@ -2,28 +2,18 @@ package global;
 
 import java.util.Random;
 import java.util.Scanner;
-
 import global.card.*;
 import global.card.dungeon_card.*;
 import global.card.dungeon_card.enumeration.*;
 import global.card.treasure_card.*;
 import global.card.treasure_card.enumeration.*;
 
-/**
- * The main object of the Munchkin.
- * This class allow the Player to play a game of Munchkin. It contains all the methods that control the game's phases or the actions relatives to the game (fight, etc...)
- * 
- * @author dazyj
- *
- */
-
 public class Game
 	{
 		
 		private Heap cardsDungeon;
-
 		private Heap cardsTreasure;
-
+		
 		public Game()
 		{
 			this.cardsDungeon = new Heap(CardType.dungeon);
@@ -189,8 +179,7 @@ public class Game
 						compareWithOUI = "OUI".compareTo(response);
 					case "NON":
 						response = "NON";
-						compareWithOUI = "OUI".compareTo(response);
-			
+						compareWithOUI = "OUI".compareTo(response);	
 				}
 			}
 		}
@@ -205,63 +194,61 @@ public class Game
 				}
 			}
 
-		private void questionToPlayerAddBuffToPlayerTypeClass(Player player,
-				Scanner scanner1)
+		private void questionToPlayerAddBuffToPlayerTypeClass(Player player, Scanner scanner1)
+		{
+			String bonusToAdd;
+			int testCompWithOUI;
+			if (player.getJob().getName() != null)
 			{
-				String bonusToAdd;
-				int testCompWithOUI;
-				if (player.getJob().getName() != null)
-				{
-					System.out.println("Voulez-vous ajouter un bonus de classe (Guerrier, Voleur, Prêtre)?");
-					bonusToAdd = scanner1.nextLine();
-					bonusToAdd.toUpperCase();
-					testCompWithOUI = "OUI".compareTo(bonusToAdd);
-					if (testCompWithOUI == 0)
-					{
-						String stringMaxCardBurnable = String.valueOf(player.getJob().getNbMaxCardBurnable());
-						String stringBonus = String.valueOf(player.getJob().getBonus());
-						System.out.println("Vous pouvez défausser " + stringMaxCardBurnable + " cartes utilisant chacune un bonus de " + stringBonus);
-						if (player.getJob().getNbMaxCardBurnable() != 0)
-						{
-							questionNumberCardsToPutToAddBuff(player, scanner1);
-						}
-					}
-				}
-			}
-
-		private void questionNumberCardsToPutToAddBuff(Player player,
-				Scanner scanner1)
-			{
-				System.out.println("Combien de cartes voulez-vous défausser ?");
-				int nbCardToBurn = scanner1.nextInt();
-				if (nbCardToBurn < player.getJob().getNbMaxCardBurnable())
-				{
-					int bonusHit = player.getJob().getBonus() * nbCardToBurn;
-					player.setStrength(player.getStrength() + bonusHit);
-				}
-			}
-
-		private void questionToPlayerAddBuffToPlayerTypeConsumable(
-				Player player, Scanner scanner1)
-			{
-				System.out.println("Voulez-vous ajouter un bonus de carte ? (consommable)?");
-				String bonusToAdd = scanner1.nextLine();
+				System.out.println("Voulez-vous ajouter un bonus de classe (Guerrier, Voleur, Prêtre)?");
+				bonusToAdd = scanner1.nextLine();
 				bonusToAdd.toUpperCase();
-				int testCompWithOUI = "OUI".compareTo(bonusToAdd);
+				testCompWithOUI = "OUI".compareTo(bonusToAdd);
 				if (testCompWithOUI == 0)
 				{
-					System.out.println("Choisissez une carte à poser. Rentrer le nom de la carte.");
-					String nameCardToPut = scanner1.nextLine();
-					nameCardToPut.toUpperCase();
-					Card card = player.chooseCardToPut(nameCardToPut);
-					if (card instanceof ConsumableItem)
+					String stringMaxCardBurnable = String.valueOf(player.getJob().getNbMaxCardBurnable());
+					String stringBonus = String.valueOf(player.getJob().getBonus());
+					System.out.println("Vous pouvez défausser " + stringMaxCardBurnable + " cartes utilisant chacune un bonus de " + stringBonus);
+					if (player.getJob().getNbMaxCardBurnable() != 0)
 					{
-						ConsumableItem itemCard = (ConsumableItem) card;
-						player.setStrength(player.getStrength() + itemCard.getBonus());
-						
+						questionNumberCardsToPutToAddBuff(player, scanner1);
 					}
 				}
 			}
+		}
+
+		private void questionNumberCardsToPutToAddBuff(Player player, Scanner scanner1)
+		{
+			System.out.println("Combien de cartes voulez-vous défausser ?");
+			int nbCardToBurn = scanner1.nextInt();
+			if (nbCardToBurn < player.getJob().getNbMaxCardBurnable())
+			{
+				int bonusHit = player.getJob().getBonus() * nbCardToBurn;
+				player.setStrength(player.getStrength() + bonusHit);
+			}
+		}
+		
+		private void questionToPlayerAddBuffToPlayerTypeConsumable(
+			Player player, Scanner scanner1)
+		{
+			System.out.println("Voulez-vous ajouter un bonus de carte ? (consommable)?");
+			String bonusToAdd = scanner1.nextLine();
+			bonusToAdd.toUpperCase();
+			int testCompWithOUI = "OUI".compareTo(bonusToAdd);
+			if (testCompWithOUI == 0)
+			{
+				System.out.println("Choisissez une carte à poser. Rentrer le nom de la carte.");
+				String nameCardToPut = scanner1.nextLine();
+				nameCardToPut.toUpperCase();
+				Card card = player.chooseCardToPut(nameCardToPut);
+				if (card instanceof ConsumableItem)
+				{
+					ConsumableItem itemCard = (ConsumableItem) card;
+					player.setStrength(player.getStrength() + itemCard.getBonus());
+					
+				}
+			}
+		}
 		
 		public void askHelpToOtherPlayerToFight(String help, Monster monster)
 		{
@@ -271,8 +258,7 @@ public class Game
 			case "OUI":
 				askHelp(playerInFight);
 				actInFight(monster, playerInFight);
-				PhaseDungeonCard1.setToFight(true);
-				
+				PhaseDungeonCard1.setToFight(true);		
 			case "NON":
 				FightTab.editHelper(null);
 				fightAlone(monster, playerInFight);
@@ -281,98 +267,92 @@ public class Game
 		}
 
 		private void fightAlone(Monster monster, Player playerInFight)
-			{
-				this.addBufferToPlayer(playerInFight);
-				if (playerInFight.getStrength() > monster.getLevel())
-					{
-						FightTab.editIsWin(true);
-					}
-					else
-					{
-						FightTab.editIsWin(false);
-					}
-				String jobPlayer = playerInFight.getClass().getName();
-				int testCompPlayerWithWarrior = jobPlayer.compareTo("Warrior");
-				if (testCompPlayerWithWarrior == 0)
+		{
+			this.addBufferToPlayer(playerInFight);
+			if (playerInFight.getStrength() > monster.getLevel())
 				{
-					if (playerInFight.getStrength() == monster.getLevel())
-					{
-						FightTab.editIsWin(true);
-					}
+					FightTab.editIsWin(true);
 				}
-				Munchkin.getTabOfPlayers()[Move.getIdPlayersMove()].setLevel(FightTab.getLevelBeforeP());
+				else
+				{
+					FightTab.editIsWin(false);
+				}
+			String jobPlayer = playerInFight.getClass().getName();
+			int testCompPlayerWithWarrior = jobPlayer.compareTo("Warrior");
+			if (testCompPlayerWithWarrior == 0)
+			{
+				if (playerInFight.getStrength() == monster.getLevel())
+				{
+					FightTab.editIsWin(true);
+				}
 			}
+			Munchkin.getTabOfPlayers()[Move.getIdPlayersMove()].setLevel(FightTab.getLevelBeforeP());
+		}
 
 		private void actInFight(Monster monster, Player playerInFight)
+		{
+			if (FightTab.readHelper() != null)
 			{
-				if (FightTab.readHelper() != null)
-				{
-					fightTogether(monster, playerInFight);
-				}
-				else
-				{
-					fightAlone(monster, playerInFight);	
-				}
+				fightTogether(monster, playerInFight);
 			}
-
-		private void fightTogether(Monster monster, Player playerInFight)
+			else
 			{
-				Player helperInFight = FightTab.readHelper();
-				this.addBufferToPlayer(playerInFight);
-				this.addBufferToPlayer(helperInFight);
-				if (playerInFight.getStrength() + helperInFight.getStrength() > monster.getLevel())
-					{
-						FightTab.editIsWin(true);
-					}
-				else
-					{
-						FightTab.editIsWin(false);
-					}
-				String jobPlayer = playerInFight.getClass().getName();
-				String jobHelper = helperInFight.getClass().getName();
-				int testCompPlayerWithWarrior = jobPlayer.compareTo("Warrior");
-				int testCompHelperWithWarrior = jobHelper.compareTo("Warrior");
-				if (testCompPlayerWithWarrior == 0 || testCompHelperWithWarrior == 0)
-					{
-						if (playerInFight.getStrength() == monster.getLevel())
-							{
-								FightTab.editIsWin(true);
-							}
-					}
-				FightTab.readPlayer().setLevel(FightTab.getLevelBeforeP());
-				FightTab.readHelper().setLevel(FightTab.getLevelBeforeH());
+				fightAlone(monster, playerInFight);	
 			}
-
-		private void askHelp(Player playerInFight)
-			{
-				System.out.println("Indiquez le pseudo du joueur concerné.");
-				Scanner scanner1 = new Scanner(System.in);
-				String nickname;
-				nickname = scanner1.nextLine();
-				for (int i = 0; i < Munchkin.getNbPlayer(); i++)
-				{
-					int compare2 = nickname.compareTo(Munchkin.getTabOfPlayers()[i].getPseudo());
-					if (compare2 == 0)
-						{
-							System.out.println(nickname + ", êtes vous OK pour aider " + playerInFight.getPseudo() + "?");
-							String ok = scanner1.nextLine();
-							switch (ok)
-							{
-								case "OUI":
-									FightTab.editHelper(Munchkin.getTabOfPlayers()[i]);
-								case "NON":
-									FightTab.editHelper(null);
-							}
-						}
-						
-				}
-			}
+		}
 		
-		/**
-		 * Launch a fight against a monster.
-		 * We ask if someone want help the player.
-		 * @param monster
-		 */
+		private void fightTogether(Monster monster, Player playerInFight)
+		{
+			Player helperInFight = FightTab.readHelper();
+			this.addBufferToPlayer(playerInFight);
+			this.addBufferToPlayer(helperInFight);
+			if (playerInFight.getStrength() + helperInFight.getStrength() > monster.getLevel())
+				{
+					FightTab.editIsWin(true);
+				}
+			else
+				{
+					FightTab.editIsWin(false);
+				}
+			String jobPlayer = playerInFight.getClass().getName();
+			String jobHelper = helperInFight.getClass().getName();
+			int testCompPlayerWithWarrior = jobPlayer.compareTo("Warrior");
+			int testCompHelperWithWarrior = jobHelper.compareTo("Warrior");
+			if (testCompPlayerWithWarrior == 0 || testCompHelperWithWarrior == 0)
+				{
+					if (playerInFight.getStrength() == monster.getLevel())
+						{
+							FightTab.editIsWin(true);
+						}
+				}
+			FightTab.readPlayer().setLevel(FightTab.getLevelBeforeP());
+			FightTab.readHelper().setLevel(FightTab.getLevelBeforeH());
+		}
+		
+		private void askHelp(Player playerInFight)
+		{
+			System.out.println("Indiquez le pseudo du joueur concerné.");
+			Scanner scanner1 = new Scanner(System.in);
+			String nickname;
+			nickname = scanner1.nextLine();
+			for (int i = 0; i < Munchkin.getNbPlayer(); i++)
+			{
+				int compare2 = nickname.compareTo(Munchkin.getTabOfPlayers()[i].getPseudo());
+				if (compare2 == 0)
+				{
+					System.out.println(nickname + ", êtes vous OK pour aider " + playerInFight.getPseudo() + "?");
+					String ok = scanner1.nextLine();
+					switch (ok)
+					{
+						case "OUI":
+							FightTab.editHelper(Munchkin.getTabOfPlayers()[i]);
+						case "NON":
+							FightTab.editHelper(null);
+					}
+				}			
+			}
+		}
+		
 		public void fight(Monster monster)
 		{
 			System.out.println("Le Combat commence.");
@@ -383,18 +363,13 @@ public class Game
 			this.addBuffToMonster(monster);
 			
 			System.out.println("Voulez-vous qu'un joueur vous aide ?");
-			Scanner sc1 = new Scanner(System.in);
+			Scanner scanner1 = new Scanner(System.in);
 			String help;
-			help = sc1.nextLine();
+			help = scanner1.nextLine();
 			help.toUpperCase();
 			this.askHelpToOtherPlayerToFight(help, monster);
 		}
 		
-		/**
-		 * Kill a player. 
-		 * If a player is killed his level come back to the first and his hand is removed.
-		 * @param playerdeath
-		 */
 		public void deathPlayer(Player playerdeath)
 		{
 			while (!playerdeath.getHand().getHandPlayer().isEmpty())
@@ -404,150 +379,127 @@ public class Game
 			playerdeath.setLevel(1);
 		}
 		
-		/**
-		 * Calculate the gain of the helper after the victory of a fight.
-		 * @param monsterGain
-		 * @param helper
-		 * @return
-		 */
 		public int calculateGainHelper(int monsterGain ,Player helper)
 		{
 			if(helper.getRace().getName() == "ELF")
 				return (monsterGain/2) +1;
 			return monsterGain/2;
 		}
-		/**
-		 * Calculate the gain of a player after the victory of a fight.
-		 * @param monsterGain
-		 * @param player
-		 * @return
-		 */
+
 		public int calculateGainPlayer(int monsterGain, Player player)
 		{
 			if(player.getRace().getName() == "Elf")
 				return (monsterGain - (monsterGain/2)) + 1;
 			return monsterGain - (monsterGain/2);
 		}
-		/**
-		 * The method that try for a player to flee if he lose a fight.
-		 * @param player
-		 * @return
-		 */
+
 		public boolean tryFlee(Player player)
 		{
 			Random thimble = new Random();
 			int thimbledodge = thimble.nextInt(6) + 1;
 			if(player.getJob().getName() == "Priest")
-				{
+			{
 				thimbledodge += 1;
-				}
+			}
 			if(thimbledodge >=5)
-				{
+			{
 					return true;
-				}
+			}
 			else
 				return false;
 		}
 		
 		public void createAllCardMonster()
+        {
+        	MonsterSpecification[] myPossibleMonster =MonsterSpecification.values();
+            	for(int indexTableau = 0; indexTableau < myPossibleMonster.length; indexTableau++ )
+                {
+                	Munchkin.getGameOfMunchkin().getDungeonHeap().getDeck().add(new Monster(myPossibleMonster[indexTableau]));
+                }
+        }
+
+        public void createAllCardCurse()
+        {
+        	CardCurseSpecification[] myPossibleCardCurse =CardCurseSpecification.values();
+            for(int indexTableau = 0; indexTableau < myPossibleCardCurse.length; indexTableau++ )
             {
-                    MonsterSpecification[] myPossibleMonster =MonsterSpecification.values();
-                    for(int indexTableau = 0; indexTableau < myPossibleMonster.length; indexTableau++ )
-                    {
-                            Munchkin.getGameOfMunchkin().getDungeonHeap().getDeck().add(new Monster(myPossibleMonster[indexTableau]));
-                    }
+            	Munchkin.getGameOfMunchkin().getDungeonHeap().getDeck().add(new CardCurse(myPossibleCardCurse[indexTableau]));
             }
+        }
 
-            public void createAllCardCurse()
-                    {
-                            CardCurseSpecification[] myPossibleCardCurse =CardCurseSpecification.values();
-                            for(int indexTableau = 0; indexTableau < myPossibleCardCurse.length; indexTableau++ )
-                            {
-                                    Munchkin.getGameOfMunchkin().getDungeonHeap().getDeck().add(new CardCurse(myPossibleCardCurse[indexTableau]));
-                            }
-                    }
-
-            public void createAllCardJob()
-                    {
-                            JobSpecification[] myPossibleJob =JobSpecification.values();
-                            for(int indexTableau = 0; indexTableau < myPossibleJob.length; indexTableau++ )
-                            {
-                                    Munchkin.getGameOfMunchkin().getDungeonHeap().getDeck().add(new Job(myPossibleJob[indexTableau]));
-                            }
-                    }
-            /**
-             * 
-             */
-            public void createAllCardMonsterCurse()
-                    {
-                            MonsterCurseSpecification[] myPossibleMonsterCurse =MonsterCurseSpecification.values();
-                            for(int indexTableau = 0; indexTableau < myPossibleMonsterCurse.length; indexTableau++ )
-                            {
-                                    Munchkin.getGameOfMunchkin().getDungeonHeap().getDeck().add(new MonsterCurse(myPossibleMonsterCurse[indexTableau]));
-                            }
-                    }
-            /**
-             * 
-             */
-            public void createAllCardRace()
-                    {
-                            RaceSpecification[] myPossibleRace =RaceSpecification.values();
-                            for(int indexTableau = 0; indexTableau < myPossibleRace.length; indexTableau++ )
-                            {
-                                    Munchkin.getGameOfMunchkin().getDungeonHeap().getDeck().add(new Race(myPossibleRace[indexTableau]));
-                            }
-                    }
-            public void createAllCardConsumableItem()
-                    {
-                            ConsumableItemSpecification[] myPossibleCards = ConsumableItemSpecification.values();
-                            for(int indexTableau = 0; indexTableau < myPossibleCards.length; indexTableau++ )
-                            {
-                                    Munchkin.getGameOfMunchkin().getTreasureHeap().getDeck().add(new ConsumableItem(myPossibleCards[indexTableau]));
-                            }
-                    }
-            
-            public void createAllCardEquipment()
-                    {
-                            EquipmentSpecification[] myPossibleCards = EquipmentSpecification.values();
-                            for(int indexTableau = 0; indexTableau < myPossibleCards.length; indexTableau++ )
-                            {
-                                    Munchkin.getGameOfMunchkin().getTreasureHeap().getDeck().add(new Equipment(myPossibleCards[indexTableau]));
-                            }
-                    }
-            
-            public void createAllCardLevelEffect()
-                    {
-                            LevelEffectSpecification[] myPossibleCards = LevelEffectSpecification.values();
-                            for(int indexTableau = 0; indexTableau < myPossibleCards.length; indexTableau++ )
-                            {
-                                    Munchkin.getGameOfMunchkin().getTreasureHeap().getDeck().add(new LevelEffect(myPossibleCards[indexTableau]));
-                            }
-                    }
-            
-            
-            public void setDungeon(Heap dungeon)
+        public void createAllCardJob()
+        {
+        	JobSpecification[] myPossibleJob =JobSpecification.values();
+            for(int indexTableau = 0; indexTableau < myPossibleJob.length; indexTableau++ )
             {
-            	this.cardsDungeon = dungeon;
+            	Munchkin.getGameOfMunchkin().getDungeonHeap().getDeck().add(new Job(myPossibleJob[indexTableau]));
             }
-            
-            public void setTreasure(Heap treasure)
+        }
+        
+        public void createAllCardMonsterCurse()
+        {
+        	MonsterCurseSpecification[] myPossibleMonsterCurse =MonsterCurseSpecification.values();
+            for(int indexTableau = 0; indexTableau < myPossibleMonsterCurse.length; indexTableau++ )
             {
-            	this.cardsTreasure = treasure;
+            	Munchkin.getGameOfMunchkin().getDungeonHeap().getDeck().add(new MonsterCurse(myPossibleMonsterCurse[indexTableau]));
             }
-            /**
-             * 
-             */
-    		public void verifVoidHeap()
-    			{
-    				if(Munchkin.getGameOfMunchkin().getDungeonHeap().getDeck().isEmpty())
-    					{
-    						Munchkin.CreateHeapDungeon();
-    					}
-    				if(Munchkin.getGameOfMunchkin().getTreasureHeap().getDeck().isEmpty())
-    					{
-    						Munchkin.CreateHeapTreasure();
-    					}
-    			}
-}	
-
-
+        }
+        
+        public void createAllCardRace()
+        {
+        	RaceSpecification[] myPossibleRace =RaceSpecification.values();
+            for(int indexTableau = 0; indexTableau < myPossibleRace.length; indexTableau++ )
+            {
+            	Munchkin.getGameOfMunchkin().getDungeonHeap().getDeck().add(new Race(myPossibleRace[indexTableau]));
+            }
+        }
+        
+        public void createAllCardConsumableItem()
+        {
+        	ConsumableItemSpecification[] myPossibleCards = ConsumableItemSpecification.values();
+            for(int indexTableau = 0; indexTableau < myPossibleCards.length; indexTableau++ )
+            {
+            	Munchkin.getGameOfMunchkin().getTreasureHeap().getDeck().add(new ConsumableItem(myPossibleCards[indexTableau]));
+            }
+        }
+            
+        public void createAllCardEquipment()
+        {
+        	EquipmentSpecification[] myPossibleCards = EquipmentSpecification.values();
+            for(int indexTableau = 0; indexTableau < myPossibleCards.length; indexTableau++ )
+            {
+            	Munchkin.getGameOfMunchkin().getTreasureHeap().getDeck().add(new Equipment(myPossibleCards[indexTableau]));
+            }
+        }
+            
+        public void createAllCardLevelEffect()
+        {
+        	LevelEffectSpecification[] myPossibleCards = LevelEffectSpecification.values();
+            for(int indexTableau = 0; indexTableau < myPossibleCards.length; indexTableau++ )
+            {
+            	Munchkin.getGameOfMunchkin().getTreasureHeap().getDeck().add(new LevelEffect(myPossibleCards[indexTableau]));
+            }
+        }
+            
+        public void setDungeon(Heap dungeon)
+        {
+        	this.cardsDungeon = dungeon;
+        }
+            
+        public void setTreasure(Heap treasure)
+        {
+         	this.cardsTreasure = treasure;
+        }
+            
+        public void verifVoidHeap()
+    	{
+    		if(Munchkin.getGameOfMunchkin().getDungeonHeap().getDeck().isEmpty())
+    		{
+    			Munchkin.CreateHeapDungeon();
+    		}
+    		if(Munchkin.getGameOfMunchkin().getTreasureHeap().getDeck().isEmpty())
+    		{
+    			Munchkin.CreateHeapTreasure();
+    		}
+    	}
+}
