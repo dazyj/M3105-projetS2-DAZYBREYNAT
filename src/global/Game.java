@@ -223,15 +223,21 @@ public class Game
 						System.out.println("Vous pouvez défausser " + stringMaxCardBurnable + " cartes utilisant chacune un bonus de " + stringBonus);
 						if (player.getJob().getNbMaxCardBurnable() != 0)
 						{
-							System.out.println("Combien de cartes voulez-vous défausser ?");
-							int nbCardToBurn = scanner1.nextInt();
-							if (nbCardToBurn < player.getJob().getNbMaxCardBurnable())
-							{
-								int bonusHit = player.getJob().getBonus() * nbCardToBurn;
-								player.setStrength(player.getStrength() + bonusHit);
-							}
+							questionNumberCardsToPutToAddBuff(player, scanner1);
 						}
 					}
+				}
+			}
+
+		private void questionNumberCardsToPutToAddBuff(Player player,
+				Scanner scanner1)
+			{
+				System.out.println("Combien de cartes voulez-vous défausser ?");
+				int nbCardToBurn = scanner1.nextInt();
+				if (nbCardToBurn < player.getJob().getNbMaxCardBurnable())
+				{
+					int bonusHit = player.getJob().getBonus() * nbCardToBurn;
+					player.setStrength(player.getStrength() + bonusHit);
 				}
 			}
 
